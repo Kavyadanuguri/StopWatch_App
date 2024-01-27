@@ -3,7 +3,7 @@ import {Component} from 'react'
 import './index.css'
 
 class Stopwatch extends Component {
-  state = {minutes: 0, seconds: 0, isTrue: true}
+  state = {minutes: 0, seconds: 0, isTrue: false}
 
   componentWillUnmount() {
     clearInterval(this.intervalId)
@@ -30,16 +30,11 @@ class Stopwatch extends Component {
   }
 
   startButton = () => {
-    const {isTrue} = this.state
+    this.intervalId = setInterval(this.incrementOfTime, 1000)
     this.setState({isTrue: true})
-    if (isTrue) {
-      this.intervalId = setInterval(this.incrementOfTime, 1000)
-    }
   }
 
   stopButton = () => {
-    const {isTrue} = this.setState
-    console.log(isTrue)
     this.setState({isTrue: false})
     clearInterval(this.intervalId)
   }
@@ -48,13 +43,14 @@ class Stopwatch extends Component {
     clearInterval(this.intervalId)
     this.setState({minutes: 0})
     this.setState({seconds: 0})
+    this.setState({isTrue: false})
   }
 
   render() {
     const {minutes, seconds, isTrue} = this.state
+
     console.log(minutes)
     console.log(seconds)
-    console.log(isTrue)
 
     return (
       <div className="bg-container">
@@ -68,9 +64,14 @@ class Stopwatch extends Component {
             />
             <p className="p2">Timer</p>
           </div>
-          <p className="p1">{this.getMinutesAndSeconds()}</p>
+          <h1 className="p1">{this.getMinutesAndSeconds()}</h1>
           <div className="container2">
-            <button className="btn1" type="button" onClick={this.startButton}>
+            <button
+              className="btn1"
+              type="button"
+              onClick={this.startButton}
+              disabled={isTrue}
+            >
               Start
             </button>
             <button className="btn2" type="button" onClick={this.stopButton}>
